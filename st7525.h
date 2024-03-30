@@ -61,6 +61,15 @@
  * Enum
  */
 
+typedef enum{
+	ST7525_FR_76fps,
+	ST7525_FR_95fps,
+	ST7525_FR_132fps,
+	ST7525_FR_168fps,
+
+	ST7525_FR_LIMIT
+}st7525_frame_rate_e;
+
 /**
  * Typedef and Structs
  */
@@ -102,5 +111,7 @@ void ST7525_init(st7525_t *ST7525);
 void ST7525_write(st7525_t *ST7525, st7525_write_info_t *WriteInfo);
 
 void ST7525_refresh(st7525_t *ST7525);
+
+void ST7525_frame_rate(st7525_t *ST7525, st7525_frame_rate_e fr);
 
 #endif /* DRIVERS_ST7525_ST7525_H_ */

@@ -171,4 +171,11 @@ void ST7525_write(st7525_t *ST7525, st7525_write_info_t *WriteInfo){
 	ST7525->Pending = 1;
 }
 
+void ST7525_frame_rate(st7525_t *ST7525, st7525_frame_rate_e fr){
+	if (ST7525 == NULL || fr >= ST7525_FR_LIMIT){
+		return;
+	}
+
+	__command(ST7525, ST7525_CMD_SET_FRAME_RATE | fr);
+}
 
