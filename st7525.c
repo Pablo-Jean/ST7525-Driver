@@ -144,7 +144,7 @@ void ST7525_refresh(st7525_t *ST7525){
 	__set_address(ST7525, 0, 0);
 	for (Page=0 ; Page < ST7525_PAGES ; Page++){
 //		for (Col=0 ; Col < ST7525_COLUMNS ; Col++){
-			__data(ST7525, ST7525->FrameBuffer[Page], ST7525_COLUMNS);
+			__data(ST7525, ST7525->FrameBuffer, ST7525_PAGES*ST7525_COLUMNS);
 //		}
 	}
 	ST7525->Pending = 0;
@@ -163,10 +163,10 @@ void ST7525_write(st7525_t *ST7525, st7525_write_info_t *WriteInfo){
 	Page = WriteInfo->Y/8;
 	Line = WriteInfo->Y%8;
 	if (WriteInfo->color == ST7525_COLOR_BLACK){
-		ST7525->FrameBuffer[Page][Col] &= ~(1 << Line);
+		ST7525->FrameBuffer[(Page*ST7525_COLUMNS) + Col] &= ~(1 << Line);
 	}
 	else{
-		ST7525->FrameBuffer[Page][Col] |= (1 << Line);
+		ST7525->FrameBuffer[(Page*ST7525_COLUMNS) + Col] |= (1 << Line);
 	}
 	ST7525->Pending = 1;
 }

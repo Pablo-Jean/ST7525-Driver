@@ -93,7 +93,7 @@ typedef struct{
 		TxData_f TxData;
 	}fxn;
 	uint8_t Pending;
-	uint8_t FrameBuffer[ST7525_PAGES][ST7525_COLUMNS];
+	uint8_t FrameBuffer[ST7525_PAGES*ST7525_COLUMNS];
 }st7525_t;
 
 typedef struct{
