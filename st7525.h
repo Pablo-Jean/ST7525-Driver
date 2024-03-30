@@ -32,9 +32,9 @@
 #define ST7525_SET_FXN_LOCK(handle, func)		handle.fxn.Lock = func;
 #define ST7525_SET_FXN_UNLOCK(handle, func)		handle.fxn.Unock = func;
 #define ST7525_SET_FXN_CSPIN(handle, func)		handle.fxn.CSPin = func;
-#define ST7525_SET_FXN_A0Pin(handle, func)		handle.fxn.A0Pin = func;
-#define ST7525_SET_FXN_RSTPin(handle, func)		handle.fxn.RSTPin = func;
-#define ST7525_SET_FXN_DelayUs(handle, func)	handle.fxn.DelayUs = func;
+#define ST7525_SET_FXN_A0PIN(handle, func)		handle.fxn.A0Pin = func;
+#define ST7525_SET_FXN_RSTPIN(handle, func)		handle.fxn.RSTPin = func;
+#define ST7525_SET_FXN_DELAYUS(handle, func)	handle.fxn.DelayUs = func;
 #define ST7525_SET_FXN_TXDATA(handle, func)		handle.fxn.TxData = func;
 
 #define ST7525_CMD_SET_COLUMN_LSB				0x00
