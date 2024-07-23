@@ -58,8 +58,8 @@ uint8_t __command(st7525_t *ST7525, uint8_t cmd){
 	uint8_t ret;
 	_lock_interface(ST7525);
 
-	_cs_write(ST7525, _CS_ON);
 	_a0_write(ST7525, _A0_CMD);
+	_cs_write(ST7525, _CS_ON);
 	ret = _tx_data(ST7525, &cmd, 1);
 	_cs_write(ST7525, _CS_OFF);
 
@@ -74,8 +74,8 @@ uint8_t __data(st7525_t *ST7525, uint8_t *data, uint32_t len){
 	uint8_t ret;
 	_lock_interface(ST7525);
 
-	_cs_write(ST7525, _CS_ON);
 	_a0_write(ST7525, _A0_DATA);
+	_cs_write(ST7525, _CS_ON);
 	ret = _tx_data(ST7525, data, len);
 	_cs_write(ST7525, _CS_OFF);
 
@@ -86,7 +86,7 @@ uint8_t __data(st7525_t *ST7525, uint8_t *data, uint32_t len){
 	return ST7525_SUCCESS;
 }
 
-void __set_address(st7525_t *ST7525, uint8_t page, uint8_t columns){
+void _set_address(st7525_t *ST7525, uint8_t page, uint8_t columns){
 	uint8_t lowNibbleCol, highNibbleCol;
 
 	lowNibbleCol = (columns & 0xF);
@@ -107,31 +107,35 @@ void ST7525_init(st7525_t *ST7525){
 
 	memset(ST7525->FrameBuffer, 0, sizeof(ST7525->FrameBuffer));
 
+	_cs_write(ST7525, _CS_OFF);
 	_rst_write(ST7525, _RST_ON);
-	_delay_us(ST7525, 100000UL);
+	_delay_us(ST7525, 5000);
 	_rst_write(ST7525, _RST_OFF);
-	_delay_us(ST7525, 100000UL);
+	_delay_us(ST7525, 5000);
 
-	__command(ST7525, 0xE2);
-	_delay_us(ST7525, 200000UL);
+//	__command(ST7525, ST7525_CMD_SOFT_RESET);
+//	_delay_us(ST7525, 1000000);
 	// Set Frame rate for maximum
 	__command(ST7525, ST7525_CMD_SET_FRAME_RATE | 0x3);
 	// Set Bias to 1/9
 	__command(ST7525, ST7525_CMD_SET_BIAS | 0x3);
 	// Set scan direction to Normal
 	__command(ST7525, ST7525_CMD_SET_SCAN_DIR | 0x0);
+	// Set DDRAM Strategy
+	__command(ST7525, ST7525_CMD_SET_RAM_ADDR_CTRL | 0x1);
 	// Set Contrast to 0x79
 	__command(ST7525, ST7525_CMD_SET_CONTRAST);
-	__command(ST7525, 0x79);
+	__command(ST7525, 0x70);
+	// Set Address
+	ST7525->Pending = 1;
+	_set_address(ST7525, 0, 0);
+	ST7525_refresh(ST7525);
 	// Eanbles the Dispaly
 	__command(ST7525, ST7525_CMD_SET_DISPLAY_EN | 0x1);
 
-	_delay_us(ST7525, 10000UL);
-	ST7525->Pending = 1;
 }
 
 void ST7525_refresh(st7525_t *ST7525){
-	uint8_t Page;
 	if (ST7525 == NULL){
 		return;
 	}
@@ -140,13 +144,12 @@ void ST7525_refresh(st7525_t *ST7525){
 		// no refresh is pending on the display, just return
 		return;
 	}
-	// The page order is the following: 7, 0, 1, 2, 3, 4, 5
-	__set_address(ST7525, 0, 0);
-	for (Page=0 ; Page < ST7525_PAGES ; Page++){
+	_set_address(ST7525, 0, 0);
+	__data(ST7525, ST7525->FrameBuffer, ST7525_COLUMNS*ST7525_PAGES);
+//	for (Page=0 ; Page < ST7525_PAGES ; Page++){
 //		for (Col=0 ; Col < ST7525_COLUMNS ; Col++){
-			__data(ST7525, ST7525->FrameBuffer, ST7525_PAGES*ST7525_COLUMNS);
 //		}
-	}
+//	}
 	ST7525->Pending = 0;
 }
 
@@ -158,7 +161,7 @@ void ST7525_write(st7525_t *ST7525, st7525_write_info_t *WriteInfo){
 
 	// On the HS19264 display mode, we have an offset of 15 units
 	// in the Y axys
-	WriteInfo->Y = ( (WriteInfo->Y+49) % ST7525_LINES );
+//	WriteInfo->Y = ( (WriteInfo->Y+49) % ST7525_LINES );
 	Col = WriteInfo->X;
 	Page = WriteInfo->Y/8;
 	Line = WriteInfo->Y%8;
