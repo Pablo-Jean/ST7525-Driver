@@ -30,7 +30,7 @@
 #define ST7525_PAGES							( ST7525_LINES/8 )
 
 #define ST7525_SET_FXN_LOCK(handle, func)		handle.fxn.Lock = func;
-#define ST7525_SET_FXN_UNLOCK(handle, func)		handle.fxn.Unock = func;
+#define ST7525_SET_FXN_UNLOCK(handle, func)		handle.fxn.Unlock = func;
 #define ST7525_SET_FXN_CSPIN(handle, func)		handle.fxn.CSPin = func;
 #define ST7525_SET_FXN_A0PIN(handle, func)		handle.fxn.A0Pin = func;
 #define ST7525_SET_FXN_RSTPIN(handle, func)		handle.fxn.RSTPin = func;
