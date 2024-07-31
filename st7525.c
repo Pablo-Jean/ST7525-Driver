@@ -109,14 +109,14 @@ void ST7525_init(st7525_t *ST7525){
 
 	_cs_write(ST7525, _CS_OFF);
 	_rst_write(ST7525, _RST_OFF);
-	_delay_us(ST7525, 50000);
+	_delay_us(ST7525, 1000);
 	_rst_write(ST7525, _RST_ON);
-	_delay_us(ST7525, 5000);
+	_delay_us(ST7525, 2000);
 	_rst_write(ST7525, _RST_OFF);
 	_delay_us(ST7525, 5000);
 
 //	__command(ST7525, ST7525_CMD_SOFT_RESET);
-//	_delay_us(ST7525, 1000000);
+//	_delay_us(ST7525, 5000);
 	// Set Frame rate for maximum
 	__command(ST7525, ST7525_CMD_SET_FRAME_RATE | 0x3);
 	// Set Bias to 1/9
