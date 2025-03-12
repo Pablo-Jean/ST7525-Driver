@@ -22,39 +22,39 @@
  * Privates
  */
 
-void _lock_interface(st7525_t *ST7525){
+static void _lock_interface(st7525_t *ST7525){
 	if (ST7525->fxn.Lock != NULL){
 		ST7525->fxn.Lock();
 	}
 }
 
-void _unlock_interface(st7525_t *ST7525){
+static void _unlock_interface(st7525_t *ST7525){
 	if (ST7525->fxn.Unlock != NULL){
 		ST7525->fxn.Unlock();
 	}
 }
 
-void _cs_write(st7525_t *ST7525, uint8_t signal){
+static void _cs_write(st7525_t *ST7525, uint8_t signal){
 	ST7525->fxn.CSPin(signal);
 }
 
-void _a0_write(st7525_t *ST7525, uint8_t Sig){
+static void _a0_write(st7525_t *ST7525, uint8_t Sig){
 	ST7525->fxn.A0Pin(Sig);
 }
 
-void _rst_write(st7525_t *ST7525, uint8_t Sig){
+static void _rst_write(st7525_t *ST7525, uint8_t Sig){
 	ST7525->fxn.RSTPin(Sig);
 }
 
-void _delay_us(st7525_t *ST7525, uint32_t delay){
+static void _delay_us(st7525_t *ST7525, uint32_t delay){
 	ST7525->fxn.DelayUs(delay);
 }
 
-uint8_t _tx_data(st7525_t *ST7525, uint8_t *data, uint32_t len){
+static uint8_t _tx_data(st7525_t *ST7525, uint8_t *data, uint32_t len){
 	return ST7525->fxn.TxData(data, len);
 }
 
-uint8_t __command(st7525_t *ST7525, uint8_t cmd){
+static uint8_t __command(st7525_t *ST7525, uint8_t cmd){
 	uint8_t ret;
 	_lock_interface(ST7525);
 
@@ -70,7 +70,7 @@ uint8_t __command(st7525_t *ST7525, uint8_t cmd){
 	return ST7525_SUCCESS;
 }
 
-uint8_t __data(st7525_t *ST7525, uint8_t *data, uint32_t len){
+static uint8_t __data(st7525_t *ST7525, uint8_t *data, uint32_t len){
 	uint8_t ret;
 	_lock_interface(ST7525);
 
@@ -86,7 +86,7 @@ uint8_t __data(st7525_t *ST7525, uint8_t *data, uint32_t len){
 	return ST7525_SUCCESS;
 }
 
-void _set_address(st7525_t *ST7525, uint8_t page, uint8_t columns){
+static void _set_address(st7525_t *ST7525, uint8_t page, uint8_t columns){
 	uint8_t lowNibbleCol, highNibbleCol;
 
 	lowNibbleCol = (columns & 0xF);
